@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureTools - Seguridad Avanzada</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6A0DAD;
+            --secondary-color: #FFFFFF;
+            --accent-color: #E6E6FA;
+            --text-color: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        .logo {
+            height: 50px;
+        }
+
+        .main-content {
+            margin-top: 40px;
+        }
+
+        .feature-section {
+            background-color: var(--accent-color);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .password-generator {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .password-display {
+            background-color: var(--secondary-color);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .copy-icon {
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        .password-options {
+            display: flex;
+            gap: 20px;
+        }
+
+        .slider-container {
+            flex: 1;
+        }
+
+        .checkbox-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 10px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .custom-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .custom-input:focus {
+            outline: none;
+            box-shadow: 0 0 5px var(--primary-color);
+        }
+
+        .gradient-button {
+            background: linear-gradient(45deg, var(--primary-color), #B24BF3);
+            color: var(--secondary-color);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .gradient-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .gradient-button:hover::before {
+            left: 100%;
+        }
+
+        .gradient-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .carousel {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 0;
+            scroll-snap-type: x mandatory;
+        }
+
+        .carousel-item {
+            flex: 0 0 300px;
+            scroll-snap-align: start;
+            background-color: var(--accent-color);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 2s ease;
+        }
+
+        .carousel-item:hover::before {
+            left: 100%;
+        }
+
+        .carousel-item img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .strength-meter {
+            width: 100%;
+            height: 10px;
+            background-color: #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .strength-meter-fill {
+            height: 100%;
+            width: 0;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        #qrcode {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: white;
+            display: inline-block;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .loader {
+            height: 15px;
+            aspect-ratio: 5;
+            -webkit-mask: linear-gradient(90deg,#0000 ,#fff 20% 80%,#0000);
+            background: radial-gradient(closest-side at 37.5% 50%,#fff 94%,#0000) 0/calc(80%/3) 100%;
+            animation: l48 .75s infinite linear;
+            display: none;
+            margin: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        @keyframes l48 {
+            100% {background-position: 36.36%}
+        }
+
+        .animated-text {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .gradient-text {
+            background: radial-gradient(
+                circle at 100%,
+                #b2a8fd,
+                #8678f9 50%,
+                #c7d2fe 75%,
+                #9a8dfd 75%
+            );
+            font-weight: 600;
+            background-size: 200% auto;
+            color: #000;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: animatedTextGradient 1.5s linear infinite;
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        @keyframes animatedTextGradient {
+            to {
+                background-position: 200% center;
+            }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: var(--accent-color);
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .logo {
+                height: 100px;
+            }
+
+            .password-options {
+                flex-direction: column;
+            }
+
+            .carousel-item {
+                flex: 0 0 250px;
+            }
+
+            .animated-text {
+                font-size: 1.2rem;
+                white-space: normal;
+                text-align: center;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+    </style>
+</head>
+<script src="https://cdn.userway.org/widget.js" data-account="KOtmLyZX8k"></script>
+<script src="//code.tidio.co/o0xctm8of2lolpgux9agqjmiab6wgefx.js" async></script>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://i.ibb.co/SvdF2N8/make-a-logo-for-the-words-securetools-white-backgr-P79-GKs-N-RIq5vc-Xe-YJY6-Yg-ltg-LUm-Fp-SUCYjh9-MG.png" alt="SecureTools Logo" class="logo">
+        </header>
+
+        <div class="main-content">
+            <div class="animated-text">
+                <span class="gradient-text">Mejora tu seguridad en solo unos Clicks</span>
+            </div>
+
+            <section class="feature-section">
+                <h2>Generador de Contraseñas</h2>
+                <div class="password-generator">
+                    <div class="password-display">
+                        <span id="generatedPassword">4ci9J3dYpww11RzX</span>
+                        <i class="fa-regular fa-clipboard copy-icon" onclick="copyPassword()"></i>
+                    </div>
+                    <div class="password-options">
+                        <div class="slider-container">
+                            <label for="passwordLength">Longitud: <span id="lengthValue">16</span></label>
+                            <input type="range" id="passwordLength" min="3" max="16" value="3">
+                        </div>
+                        <div class="checkbox-container">
+                            <label><input type="checkbox" id="includeLetters" checked> Letras</label>
+                            <label><input type="checkbox" id="includeNumbers" checked> Números</label>
+                            <label><input type="checkbox" id="includeSymbols"> Símbolos</label>
+                        </div>
+                    </div>
+                    <button class="gradient-button" onclick="generatePassword()">
+                        <span>Generar Contraseña</span>
+                        <div class="loader"></div>
+                    </button>
+                </div>
+            </section>
+
+            <section class="feature-section">
+                <h2>Verificador de Seguridad de Contraseñas</h2>
+                <input type="password" id="passwordToCheck" placeholder="Ingrese su contraseña" class="custom-input" oninput="checkPassword()">
+                <div class="strength-meter">
+                    <div class="strength-meter-fill" id="strengthMeter"></div>
+                </div>
+                <div id="passwordStrength"></div>
+            </section>
+
+            <section class="feature-section">
+                <h2>Generador de Códigos QR</h2>
+                <div class="qr-container">
+                    <input type="text" id="qrInput" placeholder="Ingrese el texto para el código QR" class="custom-input">
+                    <button class="gradient-button" onclick="generateQR()">
+                        <span>Generar QR</span>
+                        <div class="loader"></div>
+                    </button>
+                    <div id="qrcode"></div>
+                </div>
+            </section>
+        </div>
+
+        <div class="carousel">
+            <div class="carousel-item fade-in">
+                <img src="https://i.ibb.co/0B2jTRy/profile-pic.png" alt="Ana S.">
+                <h3>Ana S.</h3>
+                <p>"¡Increíble herramienta! Me ha ayudado mucho con la seguridad de mis cuentas."</p>
+            </div>
+            <div class="carousel-item fade-in">
+                <img src="https://i.ibb.co/BqgLC2g/profile-pic-2.png" alt="Carlos M.">
+                <h3>Carlos M.</h3>
+                <p>"Fácil de usar y muy útil. Recomendado 100%."</p>
+            </div>
+            <div class="carousel-item fade-in">
+                <img src="https://i.ibb.co/f900x5V/profile-pic-1.png" alt="Juan P.">
+                <h3>Juan P.</h3>
+                <p>"La mejor aplicación para gestionar contraseñas que he probado."</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 SecureTools. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        function generatePassword() {
+            const button = document.querySelector('.gradient-button');
+            const loader = button.querySelector('.loader');
+            const span = button.querySelector('span');
+            
+            span.style.display = 'none';
+            loader.style.display = 'block';
+            loader.style.opacity = '1';
+            
+            setTimeout(() => {
+                const length = document.getElementById('passwordLength').value;
+                const includeLetters = document.getElementById('includeLetters').checked;
+                const includeNumbers = document.getElementById('includeNumbers').checked;
+                const includeSymbols = document.getElementById('includeSymbols').checked;
+                
+                let chars = '';
+                if (includeLetters) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+                if (includeNumbers) chars += '0123456789';
+                if (includeSymbols) chars += '!@#$%^&*()_+~`|}{[]:;?><,./-=';
+                
+                let password = '';
+                for (let i = 0; i < length; i++) {
+                    password += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                
+                document.getElementById('generatedPassword').textContent = password;
+                
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    span.style.display = 'inline';
+                }, 300);
+            }, 2000);
+        }
+        
+      function copyPassword() {
+            const password = document.getElementById('generatedPassword').textContent;
+            navigator.clipboard.writeText(password).then(() => {
+                alert('Contraseña copiada al portapapeles');
+            });
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('passwordToCheck').value;
+            const strengthMeter = document.getElementById('strengthMeter');
+            const passwordStrength = document.getElementById('passwordStrength');
+            
+            let score = 0;
+            
+            // Longitud
+            if (password.length > 3) score += 1;
+            if (password.length > 6) score += 1;
+            if (password.length > 9) score += 1;
+            if (password.length > 12) score += 3;
+            
+            // Complejidad
+            if (/[A-Z]/.test(password)) score += 1;
+            if (/[a-z]/.test(password)) score += 2;
+            if (/[0-9]/.test(password)) score += 1;
+            if (/[^A-Za-z0-9]/.test(password)) score += 2;
+            
+            // Variedad de caracteres
+            const uniqueChars = new Set(password).size;
+            score += Math.min(3, Math.floor(uniqueChars / 5));
+            
+            // Penalización por repeticiones
+            const repetitions = password.length - uniqueChars;
+            score -= Math.min(2, Math.floor(repetitions / 3));
+            
+            // Ajuste final del score
+            score = Math.max(0, Math.min(10, score));
+
+            const width = (score / 10) * 100;
+            strengthMeter.style.width = width + '%';
+            
+            if (score <= 3) {
+                strengthMeter.style.backgroundColor = '#ff4d4d';
+                passwordStrength.textContent = 'Débil';
+            } else if (score <= 6) {
+                strengthMeter.style.backgroundColor = '#ffa64d';
+                passwordStrength.textContent = 'Medio';
+            } else if (score <= 9) {
+                strengthMeter.style.backgroundColor = '#4dff4d';
+                passwordStrength.textContent = 'Fuerte';
+            } else if (score <= 12) {
+                strengthMeter.style.backgroundColor = '#1a8cff';
+                passwordStrength.textContent = 'Seguro';
+            }
+        }
+
+        function generateQR() {
+            const text = document.getElementById('qrInput').value;
+            if (text.trim() === '') {
+                alert('Por favor, ingrese algún texto antes de generar el código QR.');
+                return;
+            }
+            
+            const button = document.querySelector('.qr-container .gradient-button');
+            const loader = button.querySelector('.loader');
+            const span = button.querySelector('span');
+            
+            span.style.display = 'none';
+            loader.style.display = 'block';
+            loader.style.opacity = '1';
+            
+            setTimeout(() => {
+                document.getElementById('qrcode').innerHTML = '';
+                new QRCode(document.getElementById('qrcode'), {
+                    text: text,
+                    width: 128,
+                    height: 128
+                });
+                
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    span.style.display = 'inline';
+                }, 300);
+            }, 2000);
+        }
+        
+        document.getElementById('passwordLength').addEventListener('input', function() {
+            document.getElementById('lengthValue').textContent = this.value;
+        });
+
+        // Animación del texto inicial
+        window.addEventListener('load', function() {
+            const text = document.querySelector('.gradient-text');
+            setTimeout(() => {
+                text.style.opacity = '1';
+                text.style.transform = 'translateY(0)';
+            }, 100);
+        });
+
+        // Initial password generation
+        generatePassword();
+    </script>
+
+</body></html>
